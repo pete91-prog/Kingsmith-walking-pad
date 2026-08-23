@@ -366,7 +366,10 @@ class WalkingPad:
         for frame in extract_wilink_frames(self._wilink_buf):
             status = parse_wilink_status(frame)
             if status:
-                self._status.belt_state = status.belt_state
+                if status.belt_state is BeltState.IDLE and status.speed_kmh > 0:
+                    self._status.belt_state = BeltState.PAUSED
+                else:
+                    self._status.belt_state = status.belt_state
                 self._status.speed_kmh = status.speed_kmh
                 self._status.mode = status.mode
                 self._status.elapsed_s = status.elapsed_s

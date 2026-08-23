@@ -87,13 +87,27 @@ walkingpad wifi-probe 192.168.1.50
 
 See [docs/wifi.md](docs/wifi.md). Expected result: no local control API.
 
-## Home Assistant
+## Home Assistant (HACS)
 
-Copy `custom_components/kingsmith_walkingpad` into
-`<config>/custom_components/`, restart, then **Settings → Devices & services →
-Add integration → KingSmith WalkingPad (Offline)**.
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=pete91-prog&repository=Kingsmith-walking-pad&category=integration)
 
-Or add this repository as a HACS custom integration.
+### Install from HACS
+
+1. Install [HACS](https://www.hacs.xyz/) if you do not have it yet.
+2. Open **HACS → Integrations**.
+3. Menu (⋮) → **Custom repositories**.
+4. Add `https://github.com/pete91-prog/Kingsmith-walking-pad` as type **Integration**.
+5. Search for **KingSmith WalkingPad (Offline)** and download it.
+6. Restart Home Assistant.
+7. **Settings → Devices & services → Add integration → KingSmith WalkingPad (Offline)**.
+
+The My Home Assistant badge above jumps straight to step 4 on a machine that
+already has HACS.
+
+### Manual install
+
+Copy `custom_components/kingsmith_walkingpad` into `<config>/custom_components/`
+and restart, then add the integration from the UI.
 
 Requirements:
 
