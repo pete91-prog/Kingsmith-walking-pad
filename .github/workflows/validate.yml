@@ -7,7 +7,8 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   hacs:
@@ -19,9 +20,9 @@ jobs:
         uses: hacs/action@main
         with:
           category: integration
-          # Custom repository (not in hacs/default). Repo description/topics/brands
-          # are set in GitHub settings and home-assistant/brands, not this tree.
-          ignore: brands description topics
+          # GitHub-level fields (license on default branch, description, topics)
+          # are set in the repository settings after this lands on main.
+          ignore: license description topics
 
   hassfest:
     name: Hassfest
