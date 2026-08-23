@@ -1,0 +1,79 @@
+"""UUIDs, timing, and advertised-name prefixes used by KingSmith pads."""
+
+from __future__ import annotations
+
+# Bluetooth SIG
+FTMS_SERVICE = "00001826-0000-1000-8000-00805f9b34fb"
+FTMS_FEATURE = "00002acc-0000-1000-8000-00805f9b34fb"
+FTMS_TREADMILL_DATA = "00002acd-0000-1000-8000-00805f9b34fb"
+FTMS_SPEED_RANGE = "00002ad4-0000-1000-8000-00805f9b34fb"
+FTMS_TRAINING_STATUS = "00002ad3-0000-1000-8000-00805f9b34fb"
+FTMS_CONTROL_POINT = "00002ad9-0000-1000-8000-00805f9b34fb"
+FTMS_MACHINE_STATUS = "00002ada-0000-1000-8000-00805f9b34fb"
+DEVICE_INFO_SERVICE = "0000180a-0000-1000-8000-00805f9b34fb"
+SOFTWARE_REVISION = "00002a28-0000-1000-8000-00805f9b34fb"
+MODEL_NUMBER = "00002a24-0000-1000-8000-00805f9b34fb"
+MANUFACTURER = "00002a29-0000-1000-8000-00805f9b34fb"
+
+# Classic KingSmith WiLink
+WILINK_SERVICE = "0000fe00-0000-1000-8000-00805f9b34fb"
+WILINK_NOTIFY = "0000fe01-0000-1000-8000-00805f9b34fb"
+WILINK_WRITE = "0000fe02-0000-1000-8000-00805f9b34fb"
+
+# KS-HD-* supplement gate (Z1 and similar)
+SUPPLEMENT_SERVICE = "24e2521c-f63b-48ed-85be-c5330a00fdf7"
+SUPPLEMENT_NOTIFY = "24e2521c-f63b-48ed-85be-c5330b00fdf7"
+SUPPLEMENT_WRITE = "24e2521c-f63b-48ed-85be-c5330d00fdf7"
+
+# MC-21 family ODM pre-amble (lives inside the FTMS service)
+ODM_WRITE = "d18d2c10-c44c-11e8-a355-529269fb1459"
+ODM_PREAMBLE = bytes([0x01, 0x00, 0x0D, 0x00, 0x06, 0x0B, 0x0F, 0x0D])
+
+WILINK_CMD_GAP_S = 0.08
+FTMS_CMD_GAP_S = 0.40
+SUPPLEMENT_CMD_GAP_S = 0.40
+COLD_START_WAIT_S = 8.0
+STATUS_POLL_S = 1.0
+DEFAULT_MIN_SPEED = 0.5
+DEFAULT_MAX_SPEED = 6.0
+DEFAULT_SPEED_STEP = 0.1
+DEFAULT_WEIGHT_KG = 75.0
+
+# Advertised local-name prefixes seen on KingSmith / OEM WalkingPads.
+NAME_PREFIXES = (
+    "WalkingPad",
+    "KINGSMITH",
+    "KS-HD-",
+    "KS-MC",
+    "KS-SMC",
+    "KS-X21",
+    "KS-R1",
+    "KS-C2",
+    "KS-F0",
+    "KS-F1",
+    "KS-F20",
+    "KS-H1",
+    "KS-H",
+    "KS-BL",
+    "KS-ST-",
+    "KS-SC-",
+    "KS-WLT",
+    "KS-WM",
+    "KS-TM",
+    "KS-K9",
+    "KS-K20",
+    "KS-NACH",
+    "KS-NGCH",
+    "KS-HCR",
+    "KS-KFK",
+    "ZP-ZEALR1",
+    "DYNAMAX",
+    "HW-KS-",
+)
+
+FTMS_NAME_PREFIXES = (
+    "KS-HD-",
+    "KS-MC21",
+    "KS-SMC21",
+    "ZP-ZEALR1",
+)

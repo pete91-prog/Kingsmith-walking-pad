@@ -1,0 +1,39 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "KingSmith WalkingPad",
+        "description": "Pick a treadmill discovered over Bluetooth, or enter its MAC address. Quit the KS Fit app first — the pad only accepts one BLE client.",
+        "data": {
+          "address": "Bluetooth address",
+          "name": "Name",
+          "weight_kg": "Walker weight (kg, for calorie estimate)",
+          "allow_control": "Allow remote start / speed (keep people clear of the belt)"
+        }
+      },
+      "bluetooth_confirm": {
+        "title": "KingSmith WalkingPad",
+        "description": "Add {name} ({address}) using a local Bluetooth connection. No KingSmith cloud is used."
+      }
+    },
+    "abort": {
+      "already_configured": "This WalkingPad is already configured.",
+      "no_devices_found": "No WalkingPads were found. Power the belt on and disconnect KS Fit.",
+      "not_supported": "This Bluetooth device is not a supported WalkingPad."
+    },
+    "error": {
+      "cannot_connect": "Could not connect over Bluetooth."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "WalkingPad options",
+        "data": {
+          "weight_kg": "Walker weight (kg)",
+          "allow_control": "Allow remote start / speed"
+        }
+      }
+    }
+  }
+}

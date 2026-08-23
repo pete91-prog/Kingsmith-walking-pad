@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kingsmith-walkingpad"
+version = "0.1.0"
+description = "Offline local control for KingSmith WalkingPad treadmills over Bluetooth, with a LAN HTTP/MQTT bridge."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "KingSmith WalkingPad Offline contributors" }]
+keywords = ["walkingpad", "kingsmith", "treadmill", "bluetooth", "home-assistant", "mqtt"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Home Automation",
+]
+dependencies = [
+    "bleak>=0.22.0",
+    "aiohttp>=3.9.0",
+    "paho-mqtt>=2.1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+walkingpad = "kingsmith_walkingpad.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/pete91-prog/Kingsmith-walking-pad"
+
+[tool.setuptools.packages.find]
+include = ["kingsmith_walkingpad*"]
+
+[tool.setuptools.package-data]
+kingsmith_walkingpad = ["web/*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -1,0 +1,25 @@
+{
+  "domain": "kingsmith_walkingpad",
+  "name": "KingSmith WalkingPad (Offline)",
+  "bluetooth": [
+    { "local_name": "WalkingPad*" },
+    { "local_name": "KINGSMITH*" },
+    { "local_name": "KS-*" },
+    { "local_name": "ZP-ZEALR1*" },
+    { "local_name": "DYNAMAX*" },
+    { "service_uuid": "0000fe00-0000-1000-8000-00805f9b34fb" },
+    { "service_uuid": "00001826-0000-1000-8000-00805f9b34fb" }
+  ],
+  "codeowners": ["@pete91-prog"],
+  "config_flow": true,
+  "dependencies": ["bluetooth_adapters"],
+  "documentation": "https://github.com/pete91-prog/Kingsmith-walking-pad",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/pete91-prog/Kingsmith-walking-pad/issues",
+  "requirements": [
+    "bleak>=0.22.0",
+    "bleak-retry-connector>=3.5.0"
+  ],
+  "version": "0.1.0"
+}
