@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WalkingPad — local</title>
+  <style>
+    :root {
+      --bg: #10140f;
+      --panel: #1a2118;
+      --ink: #e8f0e2;
+      --muted: #93a38a;
+      --accent: #8fd16a;
+      --warn: #e0b35a;
+      --stop: #d96a5a;
+      --line: #2a3426;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1d2919, var(--bg) 55%);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 28px 18px 64px;
+    }
+    h1 { font-size: 1.4rem; font-weight: 600; margin: 0 0 4px; }
+    .sub { color: var(--muted); margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+    .label { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .value { font-size: 1.8rem; font-variant-numeric: tabular-nums; margin-top: 6px; }
+    .speed {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .speed .value { font-size: 4rem; line-height: 1; }
+    button {
+      background: #24301f;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); color: #142010; font-weight: 650; }
+    button.danger { background: var(--stop); color: #2a0f0c; font-weight: 650; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    input[type="range"] { width: 100%; }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    .ok { color: var(--accent); border-color: #3d5c2e; }
+    footer { margin-top: 28px; color: var(--muted); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>WalkingPad</h1>
+    <p class="sub">Local control only. Nothing leaves this machine.</p>
+    <div class="card">
+      <div>
+        <span id="conn" class="badge">offline</span>
+        <span id="proto" class="badge">—</span>
+        <span id="name" class="badge">—</span>
+      </div>
+      <div class="speed">
+        <div>
+          <div class="label">Speed</div>
+          <div class="value"><span id="speed">0.0</span><span style="font-size:1.2rem"> km/h</span></div>
+        </div>
+        <div class="row">
+          <button id="down" type="button">− 0.1</button>
+          <button id="up" type="button">+ 0.1</button>
+        </div>
+      </div>
+      <input id="slider" type="range" min="0.5" max="6" step="0.1" value="2">
+      <div class="row">
+        <button class="primary" id="start" type="button">Start</button>
+        <button id="pause" type="button">Pause</button>
+        <button class="danger" id="stop" type="button">Stop</button>
+      </div>
+      <div class="row">
+        <button data-mode="manual" type="button">Manual</button>
+        <button data-mode="auto" type="button">Auto</button>
+        <button data-mode="standby" type="button">Standby</button>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      <div class="card"><div class="label">Time</div><div class="value" id="time">00:00</div></div>
+      <div class="card"><div class="label">Distance</div><div class="value" id="dist">0.00 km</div></div>
+      <div class="card"><div class="label">Steps</div><div class="value" id="steps">0</div></div>
+      <div class="card"><div class="label">Calories</div><div class="value" id="cal">—</div></div>
+      <div class="card"><div class="label">State</div><div class="value" id="state">idle</div></div>
+      <div class="card"><div class="label">Mode</div><div class="value" id="mode">—</div></div>
+    </div>
+    <footer>
+      The pad's own Wi-Fi radio talks to KingSmith cloud. This page is the offline
+      LAN front-end: your browser talks to this host, and this host talks to the
+      treadmill over Bluetooth.
+    </footer>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let status = { speed_kmh: 0, min_speed_kmh: 0.5, max_speed_kmh: 6, speed_step_kmh: 0.1 };
+
+    function fmtTime(s) {
+      const m = Math.floor((s || 0) / 60);
+      const sec = (s || 0) % 60;
+      return String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+    }
+
+    function render(s) {
+      status = s;
+      $("speed").textContent = (s.speed_kmh || 0).toFixed(1);
+      $("time").textContent = fmtTime(s.elapsed_s);
+      $("dist").textContent = (s.distance_km || 0).toFixed(2) + " km";
+      $("steps").textContent = s.steps ?? 0;
+      $("cal").textContent = s.calories == null ? "—" : Math.round(s.calories);
+      $("state").textContent = s.belt_state || "—";
+      $("mode").textContent = s.mode || "—";
+      $("name").textContent = s.name || s.address || "—";
+      $("proto").textContent = s.protocol || "—";
+      const conn = $("conn");
+      conn.textContent = s.connected ? "connected" : "offline";
+      conn.className = "badge " + (s.connected ? "ok" : "");
+      $("slider").min = s.min_speed_kmh || 0.5;
+      $("slider").max = s.max_speed_kmh || 6;
+      $("slider").step = s.speed_step_kmh || 0.1;
+      if (document.activeElement !== $("slider")) {
+        $("slider").value = s.target_speed_kmh || s.speed_kmh || 2;
+      }
+    }
+
+    async function api(path, body) {
+      const opts = body === undefined
+        ? { method: "GET" }
+        : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) };
+      const res = await fetch(path, opts);
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    }
+
+    async function refresh() {
+      try { render(await api("/api/status")); }
+      catch (err) { $("conn").textContent = "error"; }
+    }
+
+    $("start").onclick = () => api("/api/start", { speed: Number($("slider").value) }).then(render);
+    $("stop").onclick = () => api("/api/stop", {}).then(render);
+    $("pause").onclick = () => api("/api/pause", {}).then(render);
+    $("slider").onchange = () => api("/api/speed", { kmh: Number($("slider").value) }).then(render);
+    $("up").onclick = () => api("/api/speed", { kmh: (status.speed_kmh || Number($("slider").value)) + 0.1 }).then(render);
+    $("down").onclick = () => api("/api/speed", { kmh: (status.speed_kmh || Number($("slider").value)) - 0.1 }).then(render);
+    document.querySelectorAll("[data-mode]").forEach((btn) => {
+      btn.onclick = () => api("/api/mode", { mode: btn.dataset.mode }).then(render);
+    });
+    refresh();
+    setInterval(refresh, 1000);
+  </script>
+</body>
+</html>
